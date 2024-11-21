@@ -1,4 +1,4 @@
-export function SecondPage({ updateData, atar, ucat, highSchool, extracurriculars, lettersOfRecommendation, interviewScore}) {
+export function SecondPage({ updateData, atar, ucat, highSchool, extracurricularActivities, lettersOfRecommendation, interviewScore}) {
   return (
     <div>
       <label>ATAR</label>
@@ -25,8 +25,8 @@ export function SecondPage({ updateData, atar, ucat, highSchool, extracurricular
       <label>Extracurricular Activities</label>
       <input
         required
-        value={extracurriculars}
-        onChange={(e) => updateData("extracurriculars", e.target.value)}
+        value={extracurricularActivities}
+        onChange={(e) => updateData("extracurricularActivities", e.target.value)}
       />
       <label>Letters of Recommendation</label>
       <input

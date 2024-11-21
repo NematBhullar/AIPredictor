@@ -5,7 +5,7 @@ import { SecondPage } from "./SecondPage";
 import { ThirdPage } from "./ThirdPage";
 import { ResultPage } from "./ResultPage";
 
-const INITIAL_DATA = {
+const FORM_DATA_TEMPLATE = {
   firstName: "",
   lastName: "",
   age: "",
@@ -13,7 +13,7 @@ const INITIAL_DATA = {
   atar: "",
   ucat: "",
   highSchool: "",
-  extracurriculars: "",
+  extracurricularActivities: "",
   stateOfResidence: "",
   lettersOfRecommendation: 0,
   interviewScore: 0,
@@ -25,7 +25,7 @@ const INITIAL_DATA = {
 };
 
 function App() {
-  const storedData = JSON.parse(localStorage.getItem("data")) || INITIAL_DATA;
+  const storedData = JSON.parse(localStorage.getItem("data")) || FORM_DATA_TEMPLATE;
   const [data, setData] = useState(storedData);
   const [loading, setLoading] = useState(false); 
 
@@ -52,47 +52,45 @@ function App() {
     // If it is not the last page, navigate to the next page
     if (!isLastPage) return next();
 
-    // If it is the last page, submit the form
+    // If it is the last page, create and submit the form
     setLoading(true);
-    try {
-      const formData = new FormData();
+    const formData = new FormData();
 
-      formData.append("age", data.age);
-      formData.append("gender", data.gender);
-      formData.append("ethnicity", "Australian");
-      formData.append("highSchool", data.highSchool);
-      formData.append("stateOfResidence", data.stateOfResidence);
-      formData.append("atar", data.atar);
-      formData.append("ucat", data.ucat);
-      formData.append("extracurriculars", data.extracurriculars);
-      formData.append("lettersOfRecommendation", data.lettersOfRecommendation);
-      formData.append("interviewScore", data.interviewScore);
+    formData.append("age", data.age);
+    formData.append("gender", data.gender);
+    formData.append("ethnicity", "Australian");
+    formData.append("highSchool", data.highSchool);
+    formData.append("interviewScore", data.interviewScore);
+    formData.append("atar", data.atar);
+    formData.append("ucat", data.ucat);
+    formData.append("extracurricularActivities", data.extracurricularActivities);
+    formData.append("stateOfResidence", data.stateOfResidence);
+    formData.append("lettersOfRecommendation", data.lettersOfRecommendation);
+    formData.append("interviewScore", data.interviewScore);
 
-      if (data.cv) formData.append("cv", data.cv);
-      if (data.highSchoolReport) formData.append("highSchoolReport", data.highSchoolReport);
-      if (data.personalStatement) formData.append("personalStatement", data.personalStatement);
-      if (data.academicStatement) formData.append("academicStatement", data.academicStatement);
-      if (data.otherDocuments) formData.append("otherDocuments", data.otherDocuments);
+    (data.cv) ? formData.append("cv", data.cv) : formData.append("cv", null);
+    (data.personalStatement) ? formData.append("personalStatement", data.personalStatement) : formData.append("personalStatement", null);
+    (data.academicStatement) ? formData.append("academicStatement", data.academicStatement) : formData.append("academicStatement", null);
+    (data.highSchoolReport) ? formData.append("highSchoolReport", data.highSchoolReport) : formData.append("highSchoolReport", null);
+    (data.otherDocuments) ? formData.append("otherDocuments", data.otherDocuments) : formData.append("otherDocuments", null);
 
-      const response = await fetch("https://michaelshi.tplinkdns.com/predict", {
-        method: "POST",
-        body: formData,
-        mode: 'no-cors' 
+    fetch("https://michaelshi.tplinkdns.com/prediction", {
+      method: "POST",
+      body: formData,
+    })
+      .then((response) => {
+        if (!response.ok) { 
+          throw new Error(`Error! HTTP Status: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log("TA-DA! Here are your prediction results:", data);
+      })
+      .catch((error) => {
+        console.error("Oops! There was an error submitting the form:", error);
       });
-
-      if (response.ok) {
-        const result = await response.json();
-        updateData("result", result);
-      } else {
-        throw new Error("Failed to fetch");
-        alert("Something went wrong");
-      }
-    } catch (error) {
-      console.error("Oops! An error occurred:", error);
-    } finally {
-      setLoading(false);
-    }
-
+    setLoading(false);
   }
 
   return (
