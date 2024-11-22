@@ -4,6 +4,7 @@ import { FirstPage } from "./FirstPage";
 import { SecondPage } from "./SecondPage";
 import { ThirdPage } from "./ThirdPage";
 import { ResultPage } from "./ResultPage";
+import styles from "./App.css";
 
 const FORM_DATA_TEMPLATE = {
   firstName: "",
@@ -28,6 +29,8 @@ function App() {
   const storedData = JSON.parse(localStorage.getItem("data")) || FORM_DATA_TEMPLATE;
   const [data, setData] = useState(storedData);
   const [loading, setLoading] = useState(false); 
+  const [startClicked, setStartClicked] = useState(false); 
+  const [resultVisible, setResultVisible] = useState(false);
 
   function updateData(key, value) {
     const updatedData = { ...data, [key]: value };
@@ -37,10 +40,11 @@ function App() {
 
   function handleFileUpload(key, file) {
     if (!file) return;
-    updateData(key, file);  
+    const updatedData = { ...data, [key]: file };
+    setData(updatedData);
   }
 
-  const { currentPageIndex, page, pages, isFirstPage, isLastPage, next, back } = useForm([
+  const { currentPageIndex, page, pages, isFirstPage, isLastPage, goToPage, next, back } = useForm([
     <FirstPage {...data} updateData={updateData} />,
     <SecondPage {...data} updateData={updateData} handleFileUpload={handleFileUpload} />,
     <ThirdPage {...data} updateData={updateData} handleFileUpload={handleFileUpload} />
@@ -74,6 +78,7 @@ function App() {
     (data.highSchoolReport) ? formData.append("highSchoolReport", data.highSchoolReport) : formData.append("highSchoolReport", null);
     (data.otherDocuments) ? formData.append("otherDocuments", data.otherDocuments) : formData.append("otherDocuments", null);
 
+    // fetch("http://127.0.0.1:8000/prediction", {
     fetch("https://michaelshi.tplinkdns.com/prediction", {
       method: "POST",
       body: formData,
@@ -85,7 +90,9 @@ function App() {
         return response.json();
       })
       .then((data) => {
+        setResultVisible(true);
         console.log("TA-DA! Here are your prediction results:", data);
+        // console.log("Here is your reason:", data.file_scores);
       })
       .catch((error) => {
         console.error("Oops! There was an error submitting the form:", error);
@@ -94,24 +101,55 @@ function App() {
   }
 
   return (
-    <div>
-      <form onSubmit={onSubmit}>
-        <div key={currentPageIndex}>
-          {page}
-          <div>{currentPageIndex + 1} / {pages.length}</div>
-          
-          {!isFirstPage && (
-            <button type="button" onClick={back}>
-              Back
-            </button>
-          )}
-
-          <button type="submit">
-            {isLastPage ? "Submit" : "Next"}
+    <div className="app">
+      {/* Starting Home Page */}
+      {!startClicked && (
+        <div className="overlay">
+          <button 
+            className="start-button" 
+            onClick={() => setStartClicked(true)}>
+            Start
           </button>
-
         </div>
-      </form>
+      )}
+      
+      {/* Forms for User */}
+      <div className="form-wrapper">
+        <form onSubmit={onSubmit}>
+          <div key={currentPageIndex}>
+            {page}
+            <div>{currentPageIndex + 1} / {pages.length}</div>
+            
+            {!isFirstPage && (
+              <button type="button" onClick={back}>
+                Back
+              </button>
+            )}
+
+            <button type="submit">
+              {isLastPage ? "Submit" : "Next"}
+            </button>
+
+          </div>
+        </form>
+      </div> 
+
+      {/* Results Page Overlay */}
+      {resultVisible && (
+        <div className="overlay">
+          <div className=".result-page">
+            <button 
+              className="start-button" 
+              onClick={() => {
+                setResultVisible(false);
+                setStartClicked(false);
+              }}>
+              Finish
+            </button>
+          </div>  
+        </div>
+      )} 
+
     </div>
   );
 }
