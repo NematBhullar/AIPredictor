@@ -5,8 +5,7 @@ import { SecondPage } from "./pages/SecondPage";
 import { ThirdPage } from "./pages/ThirdPage";
 import { ResultPage } from "./pages/ResultPage";
 import { ProgressBar } from "./components/ProgressBar";
-import styles from "./App.css";
-import banner from "./images/banner.png";
+import "./App.css";
 
 const FORM_DATA_TEMPLATE = {
   firstName: "",
@@ -54,7 +53,7 @@ function App() {
     setFileData(updatedData);
   }
 
-  const { currentPageIndex, page, pages, isFirstPage, isLastPage, goToPage, next, back } = useForm([
+  const { currentPageIndex, page, pages, isFirstPage, isLastPage, next, back } = useForm([
     <FirstPage {...userData} updateData={updateData} />,
     <SecondPage {...userData} updateData={updateData} handleFileUpload={handleFileUpload} />,
     <ThirdPage {...userData} updateData={updateData} handleFileUpload={handleFileUpload} />

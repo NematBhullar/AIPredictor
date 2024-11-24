@@ -5,7 +5,7 @@ export function ProgressBar({currentPageIndex, length}) {
 
   useEffect(() => { 
     setProgress(currentPageIndex/(length - 1) * 100);
-  }, [currentPageIndex]);
+  }, [currentPageIndex, length]);
 
   return (
     <div className="progress">

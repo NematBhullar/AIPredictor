@@ -11,9 +11,9 @@ export function useForm(pages) {
     setCurrentPageIndex((i) => (i <= 0 ? i : i - 1));
   }
 
-  function goToPage(index) {
-    setCurrentPageIndex(index);
-  }
+  // function goToPage(index) {
+  //   setCurrentPageIndex(index);
+  // }
 
   return {
     currentPageIndex,
