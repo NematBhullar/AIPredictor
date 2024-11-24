@@ -1,21 +1,27 @@
 export function SecondPage({ updateData, atar, ucat, highSchool, extracurricularActivities, lettersOfRecommendation, interviewScore}) {
   return (
     <div>
-      <label>ATAR</label>
-      <input
-        autoFocus
-        required
-        type="number"
-        value={atar}
-        onChange={(e) => updateData("atar", e.target.value)}
-      />
-      <label>UCAT</label>
-      <input
-        required
-        type="number"
-        value={ucat}
-        onChange={(e) => updateData("ucat", e.target.value)}
-      />
+      <div className="input-container-row">
+        <div className="input-container">
+          <label>ATAR</label>
+          <input
+            autoFocus
+            required
+            type="number"
+            value={atar}
+            onChange={(e) => updateData("atar", e.target.value)}
+          />
+        </div>
+        <div className="input-container">
+          <label>UCAT</label>
+          <input
+            required
+            type="number"
+            value={ucat}
+            onChange={(e) => updateData("ucat", e.target.value)}
+          />
+        </div>
+      </div>
       <label>High School</label>
       <input
         required

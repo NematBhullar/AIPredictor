@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { useForm } from "./useForm";
-import { FirstPage } from "./FirstPage";
-import { SecondPage } from "./SecondPage";
-import { ThirdPage } from "./ThirdPage";
-import { ResultPage } from "./ResultPage";
+import { FirstPage } from "./pages/FirstPage";
+import { SecondPage } from "./pages/SecondPage";
+import { ThirdPage } from "./pages/ThirdPage";
+import { ResultPage } from "./pages/ResultPage";
+import { ProgressBar } from "./components/ProgressBar";
 import styles from "./App.css";
+import banner from "./images/banner.png";
 
 const FORM_DATA_TEMPLATE = {
   firstName: "",
@@ -18,36 +20,44 @@ const FORM_DATA_TEMPLATE = {
   stateOfResidence: "",
   lettersOfRecommendation: 0,
   interviewScore: 0,
+};
+
+const FILE_DATA_TEMPLATE = {
   cv: null,
   highSchoolReport: null,
   personalStatement: null,
   academicStatement: null,
   otherDocuments: null,
-};
+}
 
 function App() {
-  const storedData = JSON.parse(localStorage.getItem("data")) || FORM_DATA_TEMPLATE;
-  const [data, setData] = useState(storedData);
+  const storedData = JSON.parse(localStorage.getItem("userData")) || FORM_DATA_TEMPLATE;
+  const storedFileData = FILE_DATA_TEMPLATE
+
+  const [userData, setUserData] = useState(storedData);
+  const [fileData, setFileData] = useState(storedFileData);
+  const [reasons, setReasons] = useState([]);
+  const [scores, setScores] = useState([]);
   const [loading, setLoading] = useState(false); 
   const [startClicked, setStartClicked] = useState(false); 
   const [resultVisible, setResultVisible] = useState(false);
 
   function updateData(key, value) {
-    const updatedData = { ...data, [key]: value };
-    setData(updatedData);
-    localStorage.setItem("data", JSON.stringify(updatedData)); 
+    const updatedData = { ...userData, [key]: value };
+    setUserData(updatedData);
+    localStorage.setItem("userData", JSON.stringify(updatedData)); 
   }
 
   function handleFileUpload(key, file) {
     if (!file) return;
-    const updatedData = { ...data, [key]: file };
-    setData(updatedData);
+    const updatedData = { ...fileData, [key]: file };
+    setFileData(updatedData);
   }
 
   const { currentPageIndex, page, pages, isFirstPage, isLastPage, goToPage, next, back } = useForm([
-    <FirstPage {...data} updateData={updateData} />,
-    <SecondPage {...data} updateData={updateData} handleFileUpload={handleFileUpload} />,
-    <ThirdPage {...data} updateData={updateData} handleFileUpload={handleFileUpload} />
+    <FirstPage {...userData} updateData={updateData} />,
+    <SecondPage {...userData} updateData={updateData} handleFileUpload={handleFileUpload} />,
+    <ThirdPage {...userData} updateData={updateData} handleFileUpload={handleFileUpload} />
   ]);
 
   async function onSubmit(e) {
@@ -60,39 +70,49 @@ function App() {
     setLoading(true);
     const formData = new FormData();
 
-    formData.append("age", data.age);
-    formData.append("gender", data.gender);
+    formData.append("name", userData.firstName);
+    formData.append("age", userData.age);
+    formData.append("gender", userData.gender);
     formData.append("ethnicity", "Australian");
-    formData.append("highSchool", data.highSchool);
-    formData.append("interviewScore", data.interviewScore);
-    formData.append("atar", data.atar);
-    formData.append("ucat", data.ucat);
-    formData.append("extracurricularActivities", data.extracurricularActivities);
-    formData.append("stateOfResidence", data.stateOfResidence);
-    formData.append("lettersOfRecommendation", data.lettersOfRecommendation);
-    formData.append("interviewScore", data.interviewScore);
+    formData.append("highSchool", userData.highSchool);
+    formData.append("interviewScore", userData.interviewScore);
+    formData.append("atar", userData.atar);
+    formData.append("ucat", userData.ucat);
+    formData.append("extracurricularActivities", userData.extracurricularActivities);
+    formData.append("stateOfResidence", userData.stateOfResidence);
+    formData.append("lettersOfRecommendation", userData.lettersOfRecommendation);
+    formData.append("interviewScore", userData.interviewScore);
 
-    (data.cv) ? formData.append("cv", data.cv) : formData.append("cv", null);
-    (data.personalStatement) ? formData.append("personalStatement", data.personalStatement) : formData.append("personalStatement", null);
-    (data.academicStatement) ? formData.append("academicStatement", data.academicStatement) : formData.append("academicStatement", null);
-    (data.highSchoolReport) ? formData.append("highSchoolReport", data.highSchoolReport) : formData.append("highSchoolReport", null);
-    (data.otherDocuments) ? formData.append("otherDocuments", data.otherDocuments) : formData.append("otherDocuments", null);
-
-    // fetch("http://127.0.0.1:8000/prediction", {
-    fetch("https://michaelshi.tplinkdns.com/prediction", {
+    if (fileData.cv) formData.append("cv", fileData.cv);
+    if (fileData.personalStatement) formData.append("personalStatement", fileData.personalStatement);
+    if (fileData.academicStatement) formData.append("academicStatement", fileData.academicStatement);
+    if (fileData.highSchoolReport) formData.append("highSchoolReport", fileData.highSchoolReport);
+    if (fileData.otherDocuments) formData.append("otherDocuments", fileData.otherDocuments);
+    
+    // fetch("https://michaelshi.tplinkdns.com/prediction", {
+    fetch("http://127.0.0.1:11111/prediction", {
       method: "POST",
       body: formData,
     })
       .then((response) => {
         if (!response.ok) { 
+          console.log(userData)
           throw new Error(`Error! HTTP Status: ${response.status}`);
         }
         return response.json();
       })
       .then((data) => {
+        // console.log("TA-DA! Here are your prediction results:", data);
+        // Return a div that displays the results
+        setReasons(data["reasons"]);
+        let data_pred = {}
+        data_pred[data["predictions"][0]["classes"][0]] = data["predictions"][0]["scores"][0];
+        data_pred[data["predictions"][0]["classes"][1]] = data["predictions"][0]["scores"][1];
+        data_pred[data["predictions"][0]["classes"][2]] = data["predictions"][0]["scores"][2];
+        setScores(data_pred);
         setResultVisible(true);
-        console.log("TA-DA! Here are your prediction results:", data);
-        // console.log("Here is your reason:", data.file_scores);
+        // console.log(data["reasons"]);
+        // console.log(data_pred);
       })
       .catch((error) => {
         console.error("Oops! There was an error submitting the form:", error);
@@ -102,51 +122,72 @@ function App() {
 
   return (
     <div className="app">
+      <div className="banner">
+        <h1>Medical School Application Predictor</h1>
+        <p>Thesis &nbsp; | &nbsp; Nemat Bhullar</p>
+      </div>
+      
       {/* Starting Home Page */}
       {!startClicked && (
         <div className="overlay">
-          <button 
-            className="start-button" 
-            onClick={() => setStartClicked(true)}>
-            Start
-          </button>
+          <div className="start-page">
+            <h1>Welcome to the Medical School Application Predictor</h1>
+            <p>Click the button below to start the application process.</p>
+            <button 
+              className="start-button" 
+              onClick={() => setStartClicked(true)}>
+              Start
+            </button>
+          </div>
         </div>
       )}
+
+      
       
       {/* Forms for User */}
       <div className="form-wrapper">
+        <ProgressBar currentPageIndex={currentPageIndex} length={pages.length} />
+        
         <form onSubmit={onSubmit}>
           <div key={currentPageIndex}>
             {page}
-            <div>{currentPageIndex + 1} / {pages.length}</div>
             
-            {!isFirstPage && (
-              <button type="button" onClick={back}>
-                Back
+            <div className="button-container">
+              <button type="button" onClick={back} hidden={isFirstPage}>
+                  Back
               </button>
-            )}
 
-            <button type="submit">
-              {isLastPage ? "Submit" : "Next"}
-            </button>
-
+              <button type="submit">
+                {isLastPage ? "Submit" : "Next"}
+              </button>
+            </div>
+  
           </div>
         </form>
       </div> 
 
+      {/* Loading Spinner */}
+      {loading && (
+        <div className="overlay">
+          <div className="loading">
+            <div className="spinner"></div>
+            <p>Loading...</p>
+          </div>
+        </div>
+      )}
+
       {/* Results Page Overlay */}
       {resultVisible && (
         <div className="overlay">
-          <div className=".result-page">
-            <button 
-              className="start-button" 
-              onClick={() => {
-                setResultVisible(false);
-                setStartClicked(false);
-              }}>
-              Finish
-            </button>
-          </div>  
+          <ResultPage
+            reasons={reasons}
+            scores={scores}
+            resultVisible={resultVisible}
+            onClose={() => {
+              setResultVisible(false);
+              setStartClicked(false);
+            }}
+          />
         </div>
       )} 
 

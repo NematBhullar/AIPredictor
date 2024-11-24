@@ -28,12 +28,22 @@ export function FirstPage({ updateData, firstName, lastName, age, gender, stateO
         onChange={(e) => updateData("gender", e.target.value)}
       />
       <label>State of Residence</label>
-      <input
+      <select
         required
-        type="checkbox"
-        checked = {stateOfResidence}
+        type="dropdown"
+        value = {stateOfResidence}
         onChange={(e) => updateData("stateOfResidence", e.target.value)}
-      />
+      >
+        <option value="">Select your state</option>
+        <option value="NSW">New South Wales</option>
+        <option value="VIC">Victoria</option>
+        <option value="QLD">Queensland</option>
+        <option value="SA">South Australia</option>
+        <option value="WA">Western Australia</option>
+        <option value="TAS">Tasmania</option>
+        <option value="NT">Northern Territory</option>
+        <option value="ACT">Australian Capital Territory</option>
+      </select>
     </div>
   );
 }

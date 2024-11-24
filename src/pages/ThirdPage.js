@@ -25,13 +25,13 @@ export function ThirdPage({ updateData, handleFileUpload }) {
         autoFocus
         type="file"
         accept=".docx, .pdf, .txt"
-        onChange={(e) => updateData("highSchoolReport", e.target.files[0])}
+        onChange={(e) => handleFileUpload("highSchoolReport", e.target.files[0])}
       />
       <label>Other Documents</label>
       <input
         type="file"
         accept=".docx, .pdf, .txt"
-        onChange={(e) => updateData("otherDocuments", e.target.files[0])}
+        onChange={(e) => handleFileUpload("otherDocuments", e.target.files[0])}
       />
     </div>  
   );
