@@ -18,9 +18,9 @@ export function ResultPage({ reasons = {}, scores = {}, resultVisible, onClose }
         {Object.keys(reasons).length > 0 && !Object.values(reasons).includes("No reason provided") ? (
           <div>
             {Object.entries(reasons).map(([key, value], index) => (
-              <p key={index}>
-                <p className="feedback-title">{toTitleCase(key)}</p> <span>{formatText(value)}</span>
-              </p>
+              <div key={index}>
+                <span className="feedback-title">{toTitleCase(key)}</span> <span>{formatText(value)}</span>
+              </div>
             ))}
           </div>
         ) : (
@@ -58,18 +58,18 @@ const formatText = (text) => {
           item = item.replace(/\*/g, "");
           const [title, description] = item.split(":").map(part => part.trim());
           return (
-            <div key={index} className="feedback-item">
+            <p key={index} className="feedback-item">
               <strong>{title}:</strong> {description}
-            </div>
+            </p>
           );
         } else {
           // For non-bold items, just return a bullet point
           return (
-            <p key={index} className="feedback-item">
-              <ul>
+            <span key={index} className="feedback-item">
+              <p>
                 <li>{item.trim()}</li>
-              </ul>
-            </p>
+              </p>
+            </span>
           );
         }
       })}

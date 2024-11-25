@@ -89,8 +89,9 @@ function App() {
     if (fileData.otherDocuments) formData.append("otherDocuments", fileData.otherDocuments);
     
     
-    // fetch("http://127.0.0.1:11111/prediction", {
-    fetch("https://michaelshi.tplinkdns.com/prediction", {
+    
+    // fetch("https://michaelshi.tplinkdns.com/prediction", {
+    fetch("http://127.0.0.1:11111/prediction", {
       method: "POST",
       body: formData,
     })

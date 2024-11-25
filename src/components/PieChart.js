@@ -12,9 +12,9 @@ export function PieChart({ scores }) {
     labels: Object.keys(scores), // Classes i.e. 'Admitted', 'Waitlisted', 'Rejected'
     datasets: [
       {
-        data: Object.values(scores), // Scores for each class
-        backgroundColor: ["#4caf50", "#2196f3", "#ff9800"], // Corresponding colors for each class
-        borderColor: ["#ffffff", "#ffffff", "#ffffff"], // Border color for segments
+        data: Object.values(scores), 
+        backgroundColor: ["#6acc70", "#f7554d", "#ffd552"], // Corresponding colors for each class
+        borderColor: ["#ffffff", "#ffffff", "#ffffff"], // Border color for each class
         borderWidth: 2,
       },
     ],
