@@ -88,8 +88,8 @@ function App() {
     if (fileData.highSchoolReport) formData.append("highSchoolReport", fileData.highSchoolReport);
     if (fileData.otherDocuments) formData.append("otherDocuments", fileData.otherDocuments);
     
-    fetch("http://127.0.0.1:11111/prediction", {
-    // fetch("https://michaelshi.tplinkdns.com/prediction", {
+    // fetch("http://127.0.0.1:11111/prediction", {
+    fetch("https://michaelshi.tplinkdns.com/prediction", {
       method: "POST",
       body: formData,
     })
@@ -119,7 +119,11 @@ function App() {
   return (
     <div className="app">
       <div className="banner">
-        <h1>Medical School Application Predictor</h1>
+        <h1 onClick={() => {
+          setStartClicked(false);
+          setLoading(false);
+          setResultVisible(false);
+        }}>Medical School Application Predictor</h1>
         <p>Thesis &nbsp; | &nbsp; Nemat Bhullar</p>
       </div>
       
@@ -139,17 +143,32 @@ function App() {
       )}
 
       
-      
       {/* Forms for User */}
       <div className="form-wrapper">
-        <ProgressBar currentPageIndex={currentPageIndex} length={pages.length} />
+        <div className="navigation-banner">
+          <button className="close-button" onClick={() => {
+              setStartClicked(false);
+              setLoading(false);
+              setResultVisible(false);
+          }}>&#x2190;</button>
+          <ProgressBar currentPageIndex={currentPageIndex} length={pages.length} />
+        </div>
+        
         
         <form onSubmit={onSubmit}>
           <div key={currentPageIndex}>
             {page}
             
             <div className="button-container">
-              <button type="button" onClick={back} hidden={isFirstPage}>
+              <button type="button" onClick={() => {
+                if (isFirstPage) {
+                  setStartClicked(false);
+                  setLoading(false);
+                  setResultVisible(false);
+                } else { 
+                  back() 
+                }
+              }} >
                   Back
               </button>
 

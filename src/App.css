@@ -224,7 +224,8 @@ h2 b {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin: 10px auto 35px auto;
+  margin: 10px auto;
+  width: 600px;
 }
 
 .progress-bar {
@@ -313,3 +314,27 @@ h2 b {
 .finish-button {
   margin-top: 15px;
 }
+
+.close-button {
+  border: none;
+  background: none;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  margin: 0;
+}
+
+.close-button:hover {
+  background-color: var(--yellow);
+  border: none;
+}
+
+.navigation-banner {
+  position: relative;
+  display: flex;
+  justify-content: center;  
+  align-items: center;
+  width: 100%;
+  padding: 10px 0 20px 0;  
+}
+
