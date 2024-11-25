@@ -88,10 +88,8 @@ function App() {
     if (fileData.highSchoolReport) formData.append("highSchoolReport", fileData.highSchoolReport);
     if (fileData.otherDocuments) formData.append("otherDocuments", fileData.otherDocuments);
     
-    
-    
-    // fetch("https://michaelshi.tplinkdns.com/prediction", {
-    fetch("http://127.0.0.1:11111/prediction", {
+    // fetch("http://127.0.0.1:11111/prediction", {
+    fetch("https://michaelshi.tplinkdns.com/prediction", {
       method: "POST",
       body: formData,
     })
