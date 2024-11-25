@@ -1,13 +1,20 @@
 :root {
+  --padding: 8px;
+  --overlay-radius: 10px;
+  --box-radius: 5px;
+
   --grey: #f9f9f9;
   --mediumgrey: #e6e6e6;
   --mediumdarkgrey: #bdbcbc;
   --darkgrey: #959595;
+  --darkergrey: #626262;
   --lightyellow: #fff2cc;
   --mediumyellow: #ffe599;
   --yellow: #ffcc00;
   --darkyellow: #ebad03;
   --green: #4caf50;
+  --red: #f7554d;
+  --darkred: #d9534f;
 }
 
 * {
@@ -17,8 +24,8 @@
 }
 
 body {
-  font-family: Arial, sans-serif;
-  background: var(--grey);
+  font-family: 'Helvetica', sans-serif;
+  background-color: var(--grey);
   display: flex;
   justify-content: center;
   height: 100vh;
@@ -27,46 +34,60 @@ body {
 
 .app {
   position: relative;
-  width: 100%;
-  max-width: 700px;
   background-color: var(--grey);
   border-radius: 10px;
 }
 
 .overlay {
+  min-height: 650px;
+  display: flex;
+  justify-content: center;
+  z-index: 10;
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
   background-color: var(--grey);
-  border-radius: 10px;
+  border-radius: var(--overlay-radius);
   border: 1px solid var(--mediumgrey);
-  display: flex;
-  justify-content: center;
-  z-index: 10;
 }
 
-.start-page, .loading-age {
-  height: 100%; 
+.start-page, .loading-page {
+  height: 100%;
   width: 100%;
+  padding: 30px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 30px;
 }
 
 .start-page h1 {
-  font-size: 40px;
-  text-align: center;
   margin-bottom: 30px;
+  text-align: center;
+  font-size: 45px;
+  line-height: 1.2;
+}
+
+.start-page h2 {
+  margin-bottom: 20px;
+  text-align: center;
+  font-size: 30px;
+  font-weight: normal;
 }
 
 .start-page p {
-  text-align: center;
   margin-bottom: 30px;
+  text-align: center;
+  font-weight: normal;
   color: var(--darkgrey);
+}
+
+.start-page hr {
+  width: 600px;
+  margin-bottom: 30px;
+  border: 0.5px solid var(--yellow);
 }
 
 .result-page {
@@ -79,12 +100,13 @@ body {
   width: 100%;
   max-width: 700px;
   padding: 30px;
+  position: relative; 
+  margin-top: 100px;
   background-color: var(--grey);
   border-radius: 10px;
   border: 1px solid var(--mediumgrey);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  position: relative; 
-  margin-top: 100px;
+  
 }
 
 form {
@@ -103,7 +125,6 @@ div > div {
   font-size: 18px;
 }
 
-/* Form styling */
 input,
 textarea,
 select {
@@ -134,7 +155,7 @@ textarea {
   padding: 15px 30px;
   font-size: 18px;
   background-color: var(--yellow);
-  border: none;
+  border: 1px solid var(--yellow);
   border-radius: 8px;
   cursor: pointer;
   transition: background-color 0.3s ease;
@@ -160,13 +181,14 @@ button:hover {
   border: 1px solid var(--darkyellow);
 }
 
-button[type="button"] {
-  background-color: var(--grey); /* Red for "Back" button */
+.back-button {
+  background-color: var(--grey); 
   border: 1px solid var(--mediumgrey);
 }
 
-button[type="button"]:hover {
+.back-button:hover {
   background-color: var(--mediumgrey);
+  border: 1px solid var(--mediumgrey);
 }
 
 .button-container {
@@ -176,7 +198,6 @@ button[type="button"]:hover {
   padding: 10px 0;
 }
 
-/* Banner Styling */
 .banner {
   display: flex;
   justify-content: space-between;
@@ -193,7 +214,7 @@ button[type="button"]:hover {
 
 h1 {
   font-size: 22px;
-  font-weight: 50;
+  font-weight: normal;
   margin-left: 20px;
 }
 
@@ -209,7 +230,7 @@ h2 b {
 }
 
 .banner img {
-  width: 40px; /* Adjust size of the logo */
+  width: 40px;
   height: auto;
   margin-right: 20px;
 }
@@ -252,12 +273,12 @@ h2 b {
 .input-container-row {
   display: flex;
   justify-content: space-between;
-  gap: 20px; 
+  gap: 20px;
   margin-top: 5px;
 }
 
 .input-container {
-  flex: 1; 
+  flex: 1;
   display: flex;
   flex-direction: column;
 }
@@ -266,12 +287,12 @@ h2 b {
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 101; /* Ensure spinner is on top of overlay */
+  z-index: 101;
   font-size: 24px;
   color: white;
 }
 
-/* Add a simple spinner animation */
+
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
@@ -288,13 +309,13 @@ h2 b {
 
 .feedback-container {
   width: 600px;
-  height: 150px;
+  height: 120px;
   text-align: left;
   margin: 0 20px;
   padding: 5px 10px;
   overflow: scroll;
   border: 1px solid var(--yellow);
-  border-radius: 5px;
+  border-radius: 8px;
 }
 
 .feedback-title {
@@ -368,4 +389,65 @@ h2 b {
   100% {
     transform: rotate(360deg);
   }
+}
+
+
+.file-input-wrapper {
+  margin-bottom: 20px; /* Space between file inputs */
+  display: flex;
+  flex-direction: column; /* Stack items vertically */
+}
+
+.file-input {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  background-color: var(--mediumgrey);
+  border-radius: 5px;
+  padding: 0 15px;
+  margin-top: 8px; 
+}
+
+.file-details {
+  display: flex;
+  gap: 20px;
+  font-size: 14px;
+  color: var(--darkergrey);
+}
+
+.file-icon {
+  width: 20px;
+  height: 20px;
+}
+
+.upload-button {
+  margin-top: 10px;
+  width: 150px;
+  background-color: var(--yellow);
+  border: 1px solid var(--yellow);
+}
+
+.delete-button {
+  padding-right: 0;
+  width: 50px;
+  background-color: var(--mediumgrey);
+  border: 1px solid var(--mediumgrey);
+}
+
+
+.upload-button:hover {
+  background-color: var(--darkyellow); /* Darker yellow on hover */
+  border: 1px solid var(--darkyellow);
+}
+
+.delete-button:hover {
+  background-color: var(--mediumgrey);
+  border: 1px solid var(--mediumgrey);
+}
+
+.icon {
+  width: 18px; 
+  height: 18px;
+  text-align: center;
 }

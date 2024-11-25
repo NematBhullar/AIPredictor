@@ -32,22 +32,22 @@ const FILE_DATA_TEMPLATE = {
 
 function App() {
   const storedData = JSON.parse(localStorage.getItem("userData")) || FORM_DATA_TEMPLATE;
-  const storedFileData = FILE_DATA_TEMPLATE
-
   const [userData, setUserData] = useState(storedData);
-  const [fileData, setFileData] = useState(storedFileData);
+  const [fileData, setFileData] = useState(FILE_DATA_TEMPLATE);
   const [reasons, setReasons] = useState([]);
   const [scores, setScores] = useState([]);
   const [loading, setLoading] = useState(false); 
   const [startClicked, setStartClicked] = useState(false); 
   const [resultVisible, setResultVisible] = useState(false);
 
+  // Local storage for data persistence
   function updateData(key, value) {
     const updatedData = { ...userData, [key]: value };
     setUserData(updatedData);
     localStorage.setItem("userData", JSON.stringify(updatedData)); 
   }
 
+  // Handle file uploads
   function handleFileUpload(key, file) {
     if (!file) return;
     const updatedData = { ...fileData, [key]: file };
@@ -59,6 +59,12 @@ function App() {
     <SecondPage {...userData} updateData={updateData} handleFileUpload={handleFileUpload} />,
     <ThirdPage {...userData} updateData={updateData} handleFileUpload={handleFileUpload} />
   ]);
+
+  const handleClose = () => {
+    setStartClicked(false);
+    setLoading(false);
+    setResultVisible(false);
+  };
 
   async function onSubmit(e) {
     e.preventDefault();
@@ -133,7 +139,9 @@ function App() {
       {!startClicked && (
         <div className="overlay">
           <div className="start-page">
-            <h1>Welcome to the Medical School Application Predictor</h1>
+            <h2>Welcome to the</h2>
+            <h1><b>Medical School Enrolment Predictor</b></h1>
+            <hr/>
             <p>Click the button below to start the application process.</p>
             <button 
               className="start-button" 
@@ -149,9 +157,7 @@ function App() {
       <div className="form-wrapper">
         <div className="navigation-banner">
           <button className="close-button" onClick={() => {
-              setStartClicked(false);
-              setLoading(false);
-              setResultVisible(false);
+              handleClose()
           }}>&#x2190;</button>
           <ProgressBar currentPageIndex={currentPageIndex} length={pages.length} />
         </div>
@@ -162,11 +168,9 @@ function App() {
             {page}
             
             <div className="button-container">
-              <button type="button" onClick={() => {
+              <button className="back-button" onClick={() => {
                 if (isFirstPage) {
-                  setStartClicked(false);
-                  setLoading(false);
-                  setResultVisible(false);
+                  handleClose()
                 } else { 
                   back() 
                 }
@@ -174,7 +178,7 @@ function App() {
                   Back
               </button>
 
-              <button type="submit">
+              <button className="next-button">
                 {isLastPage ? "Submit" : "Next"}
               </button>
             </div>
