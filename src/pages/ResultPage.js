@@ -66,9 +66,9 @@ const formatText = (text) => {
           // For non-bold items, just return a bullet point
           return (
             <span key={index} className="feedback-item">
-              <p>
-                <li>{item.trim()}</li>
-              </p>
+              <span>
+                <p>{item.trim()}</p>
+              </span>
             </span>
           );
         }

@@ -88,8 +88,8 @@ function App() {
     if (fileData.highSchoolReport) formData.append("highSchoolReport", fileData.highSchoolReport);
     if (fileData.otherDocuments) formData.append("otherDocuments", fileData.otherDocuments);
     
-    // fetch("http://127.0.0.1:11111/prediction", {
-    fetch("https://michaelshi.tplinkdns.com/prediction", {
+    fetch("http://127.0.0.1:11111/prediction", {
+    // fetch("https://michaelshi.tplinkdns.com/prediction", {
       method: "POST",
       body: formData,
     })
@@ -102,7 +102,6 @@ function App() {
       })
       .then((data) => {
         // console.log("TA-DA! Here are your prediction results:", data);
-        // Return a div that displays the results
         setReasons(data["reasons"]);
         let data_pred = {}
         data_pred[data["predictions"][0]["classes"][0]] = data["predictions"][0]["scores"][0];
@@ -110,8 +109,6 @@ function App() {
         data_pred[data["predictions"][0]["classes"][2]] = data["predictions"][0]["scores"][2];
         setScores(data_pred);
         setResultVisible(true);
-        // console.log(data["reasons"]);
-        // console.log(data_pred);
       })
       .catch((error) => {
         console.error("Oops! There was an error submitting the form:", error);
