@@ -19,12 +19,12 @@ export function ResultPage({ reasons = {}, scores = {}, resultVisible, onClose }
           <div>
             {Object.entries(reasons).map(([key, value], index) => (
               <div key={index}>
-                <span className="feedback-title">{toTitleCase(key)}</span> <span>{formatText(value)}</span>
+                <span className="feedback-title">{toTitleCase(key)} FEEDBACK</span> <span>{formatText(value)}</span>
               </div>
             ))}
           </div>
         ) : (
-          <p className="feedback-item">No files provided</p>
+          <p className="feedback-item">No file provided</p>
         )}
       </div>
 

@@ -5,6 +5,7 @@ import { SecondPage } from "./pages/SecondPage";
 import { ThirdPage } from "./pages/ThirdPage";
 import { ResultPage } from "./pages/ResultPage";
 import { ProgressBar } from "./components/ProgressBar";
+import { Spinner } from "./components/Spinner";
 import "./App.css";
 
 const FORM_DATA_TEMPLATE = {
@@ -88,7 +89,6 @@ function App() {
     if (fileData.highSchoolReport) formData.append("highSchoolReport", fileData.highSchoolReport);
     if (fileData.otherDocuments) formData.append("otherDocuments", fileData.otherDocuments);
     
-    // fetch("http://127.0.0.1:11111/prediction", {
     fetch("https://michaelshi.tplinkdns.com/prediction", {
       method: "POST",
       body: formData,
@@ -112,8 +112,10 @@ function App() {
       })
       .catch((error) => {
         console.error("Oops! There was an error submitting the form:", error);
+      })
+      .finally(() => {
+        setLoading(false);
       });
-    setLoading(false);
   }
 
   return (
@@ -184,8 +186,8 @@ function App() {
       {/* Loading Spinner */}
       {loading && (
         <div className="overlay">
-          <div className="loading">
-            <div className="spinner"></div>
+          <div className="loading-page">
+            <Spinner />
             <p>Loading...</p>
           </div>
         </div>
