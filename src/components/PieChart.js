@@ -1,13 +1,10 @@
-// PieChart.js
 import React from "react";
 import { Pie } from "react-chartjs-2";
 import { Chart as ChartJS, Title, Tooltip, Legend, ArcElement, CategoryScale, LinearScale } from "chart.js";
 
-// Register required Chart.js components
 ChartJS.register(Title, Tooltip, Legend, ArcElement, CategoryScale, LinearScale);
 
 export function PieChart({ scores }) {
-  // Pie chart data
   const data = {
     labels: Object.keys(scores), // Classes i.e. 'Admitted', 'Waitlisted', 'Rejected'
     datasets: [
@@ -20,7 +17,6 @@ export function PieChart({ scores }) {
     ],
   };
 
-  // Pie chart options (with cutout for donut chart)
   const options = {
     responsive: true,
     plugins: {
@@ -42,7 +38,7 @@ export function PieChart({ scores }) {
         },
       },
     },
-    cutout: "60%", // This controls the radius of the hole in the middle
+    cutout: "60%",
   };
 
   return (
