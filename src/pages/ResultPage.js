@@ -1,5 +1,5 @@
 import React from "react";
-import { PieChart } from "../components/PieChart"; // Import the PieChart component
+import { PieChart } from "../components/PieChart"; 
 
 export function ResultPage({ reasons = {}, scores = {}, resultVisible, onClose }) {
   if (!resultVisible) return null;
@@ -39,7 +39,9 @@ export function ResultPage({ reasons = {}, scores = {}, resultVisible, onClose }
   );
 }
 
-// https://stackoverflow.com/questions/7225407/convert-camelcasetext-to-title-case-text
+// StackOverflow (2012)
+// Accessed on November 8, 2024 
+// <https://stackoverflow.com/questions/7225407/convert-camelcasetext-to-title-case-text>
 const toTitleCase = (text) => {
   const str = text.replace(/([a-z])([A-Z])/g, '$1 $2').toUpperCase(); 
   return str.charAt(0).toUpperCase() + str.slice(1); 
